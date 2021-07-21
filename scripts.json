@@ -1,0 +1,7 @@
+{
+  "watcher": {
+    "exts": ["js", "jsx", "ts", "tsx", "json", "wat"],
+    "match": ["**/*.*"],
+    "skip": ["*/.git/*"]
+  }
+}

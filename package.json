@@ -1,0 +1,11 @@
+{
+  "name": "fast-base64",
+  "version": "1.0.0",
+  "main": "base64.js",
+  "type": "module",
+  "author": "gregor <gregor.mitscha-baude@gmx.at>",
+  "license": "MIT",
+  "dependencies": {
+    "wabt": "^1.0.23"
+  }
+}
