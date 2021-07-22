@@ -1,4 +1,11 @@
-export {toBytesSimple, toBase64Simple, toBytesCharCodeAt, toBytesStringLookup};
+export {
+  toBytesSimple,
+  toBase64Simple,
+  toBytesCharCodeAt,
+  toBytesStringLookup,
+  toBytesDataUri,
+  toBase64DataUri,
+};
 
 function toBytesSimple(str) {
   let rawStr = atob(str);
@@ -34,6 +41,24 @@ const encodeLookup = Object.fromEntries(
 const strLookup = Object.fromEntries(
   Array.from(alphabet).map((a, i) => [a, i])
 );
+
+async function toBytesDataUri(base64) {
+  let dataUri = 'data:application/octet-stream;base64,' + base64;
+  return new Uint8Array(await (await fetch(dataUri)).arrayBuffer());
+}
+
+async function toBase64DataUri(bytes) {
+  let reader = new FileReader();
+  let base64Promise = new Promise(resolve => {
+    reader.addEventListener('load', () => resolve(reader.result));
+  });
+  let blob = new Blob([bytes.buffer], {type: 'application/octet-stream'});
+  reader.readAsDataURL(blob);
+  return (await base64Promise).replace(
+    'data:application/octet-stream;base64,',
+    ''
+  );
+}
 
 function toBytesCharCodeAt(base64) {
   base64 = base64.replace(/=/g, '');
