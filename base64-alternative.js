@@ -3,6 +3,7 @@ export {
   toBase64Simple,
   toBytesCharCodeAt,
   toBytesStringLookup,
+  toBase64StringLookup,
   toBytesDataUri,
   toBase64DataUri,
 };
@@ -26,22 +27,6 @@ function toBase64Simple(bytes) {
   return btoa(rawStr);
 }
 
-const alphabet =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-const lookup = Object.fromEntries(
-  Array.from(alphabet).map((a, i) => [a.charCodeAt(0), i])
-);
-lookup['='.charCodeAt(0)] = 0;
-lookup['-'.charCodeAt(0)] = 62;
-lookup['_'.charCodeAt(0)] = 63;
-
-const encodeLookup = Object.fromEntries(
-  Array.from(alphabet).map((a, i) => [i, a.charCodeAt(0)])
-);
-const strLookup = Object.fromEntries(
-  Array.from(alphabet).map((a, i) => [a, i])
-);
-
 async function toBytesDataUri(base64) {
   let dataUri = 'data:application/octet-stream;base64,' + base64;
   return new Uint8Array(await (await fetch(dataUri)).arrayBuffer());
@@ -59,6 +44,24 @@ async function toBase64DataUri(bytes) {
     ''
   );
 }
+
+const alphabet =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+const lookup = Object.fromEntries(
+  Array.from(alphabet).map((a, i) => [a.charCodeAt(0), i])
+);
+lookup['='.charCodeAt(0)] = 0;
+lookup['-'.charCodeAt(0)] = 62;
+lookup['_'.charCodeAt(0)] = 63;
+
+const strLookup = Object.fromEntries(
+  Array.from(alphabet).map((a, i) => [a, i])
+);
+strLookup['='] = 0;
+
+const strEncodeLookup = Object.fromEntries(
+  Array.from(alphabet).map((a, i) => [i, a])
+);
 
 function toBytesCharCodeAt(base64) {
   base64 = base64.replace(/=/g, '');
@@ -102,6 +105,29 @@ function toBytesStringLookup(base64) {
   }
 
   return new Uint8Array(bytes.buffer, 0, m);
+}
+
+function toBase64StringLookup(bytes) {
+  let m = bytes.length;
+  let k = m % 3;
+  let n = Math.floor(m / 3) * 4 + (k && k + 1);
+  let N = Math.ceil(m / 3) * 4;
+  let encoded = new Array(N);
+
+  for (let i = 0, j = 0; j < m; i += 4, j += 3) {
+    let y1 = bytes[j + 0] << 16;
+    let y2 = bytes[j + 1] << 8;
+    let y3 = bytes[j + 2] | 0;
+    encoded[i + 0] = strEncodeLookup[y1 >> 18];
+    encoded[i + 1] = strEncodeLookup[((y1 + y2) >> 12) & 0x3f];
+    encoded[i + 2] = strEncodeLookup[((y2 + y3) >> 6) & 0x3f];
+    encoded[i + 3] = strEncodeLookup[y3 & 0x3f];
+  }
+
+  let base64 = encoded.join('').slice(0, n);
+  if (k === 1) base64 += '==';
+  if (k === 2) base64 += '=';
+  return base64;
 }
 
 // functions implementing the base64 lookups algebraically (used in wasm)

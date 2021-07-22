@@ -7,6 +7,7 @@ import {
   toBytesStringLookup,
   toBytesDataUri,
   toBase64DataUri,
+  toBase64StringLookup,
 } from './base64-alternative.js';
 
 const n = 1000000;
@@ -122,6 +123,12 @@ const n = 1000000;
   toBase64Js(bytes);
   console.log(
     `bytes to base64 (js fast) ${(performance.now() - start).toFixed(2)} ms`
+  );
+
+  start = performance.now();
+  toBase64StringLookup(bytes);
+  console.log(
+    `bytes to base64 (js string) ${(performance.now() - start).toFixed(2)} ms`
   );
 
   start = performance.now();
