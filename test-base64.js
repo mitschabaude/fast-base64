@@ -34,7 +34,7 @@ const n = 1000000;
     console.log('ours (wasm)', bytes3);
     throw Error('not equal');
   }
-  let base641 = await toBase64(bytes);
+  let base641 = await toBase64(bytes, true);
   let base642 = toBase64Js(bytes);
   if (base641 !== base64) {
     console.log('correct', base64);
@@ -105,6 +105,13 @@ const n = 1000000;
   await toBase64(bytes);
   console.log(
     `bytes to base64 (wasm) ${(performance.now() - start).toFixed(2)} ms`
+  );
+  start = performance.now();
+  await toBase64(bytes, true);
+  console.log(
+    `bytes to base64 (wasm, no simd) ${(performance.now() - start).toFixed(
+      2
+    )} ms`
   );
   start = performance.now();
   toBase64Simple(bytes);

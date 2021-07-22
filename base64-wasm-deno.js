@@ -5,7 +5,7 @@ const encoder = new TextEncoder();
 
 async function toBytes(base64, noSimd) {
   const {base642bytes} = await getWatModule(
-    noSimd ? 'wat/base64-like-js.wat' : 'wat/base64-simd.wat'
+    noSimd ? 'wat/base64.wat' : 'wat/base64-simd.wat'
   );
   // const {base642bytes} = await getWasmModule(
   //   noSimd ? 'wasm/base64.wasm' : 'wasm/base64-simd.wasm'
@@ -25,8 +25,10 @@ async function toBytes(base64, noSimd) {
   return new Uint8Array(memory.buffer, 0, m);
 }
 
-async function toBase64(bytes) {
-  const {bytes2base64} = await getWatModule('wat/base64-simd.wat');
+async function toBase64(bytes, noSimd) {
+  const {bytes2base64} = await getWatModule(
+    noSimd ? 'wat/base64.wat' : 'wat/base64-simd.wat'
+  );
   let m = bytes.length;
   let k = m % 3;
   let n = Math.floor(m / 3) * 4 + (k && k + 1);

@@ -1,6 +1,10 @@
 (module
   (import "imports" "memory" (memory 0))
-  ;; (import "imports" "log" (func $log (param i32)))
+  ;; UNUSED
+  
+  ;; intermediate version between simd and non-simd, where the loop is not vectorized yet, only the parts inside
+  ;; slightly faster than non-simd
+  ;; only kept here for the purpose of documenting the process
 
   (func $base642bytes (export "base642bytes") (param $n i32)
     (local $i i32)
