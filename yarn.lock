@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+binaryen@^101.0.0:
+  version "101.0.0"
+  resolved "https://registry.yarnpkg.com/binaryen/-/binaryen-101.0.0.tgz#42a9e4cc7a22e2c1d75a31d28005a9b518b2c555"
+  integrity sha512-FRmVxvrR8jtcf0qcukNAPZDM3dZ2sc9GmA/hKxBI7k3fFzREKh1cAs+ruQi+ITTKz7u/AuFMuVnbJwTh0ef/HQ==
+
 wabt@^1.0.23:
   version "1.0.23"
   resolved "https://registry.yarnpkg.com/wabt/-/wabt-1.0.23.tgz#ff8140ee328e119356d2b09d9d6bd0b4373a14ba"

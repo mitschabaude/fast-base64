@@ -6,6 +6,7 @@
   "author": "gregor <gregor.mitscha-baude@gmx.at>",
   "license": "MIT",
   "dependencies": {
+    "binaryen": "^101.0.0",
     "wabt": "^1.0.23"
   }
 }

@@ -1,12 +1,15 @@
-import {getWatModule, allocate, memory} from './deno-wasm.js';
+import {getWatModule, allocate, memory, getWasmModule} from './deno-wasm.js';
 export {toBytes, toBase64};
 
 const encoder = new TextEncoder();
 
 async function toBytes(base64, noSimd) {
   const {base642bytes} = await getWatModule(
-    noSimd ? 'wat/base64.wat' : 'wat/base64-simd.wat'
+    noSimd ? 'wat/base64-like-js.wat' : 'wat/base64-simd.wat'
   );
+  // const {base642bytes} = await getWasmModule(
+  //   noSimd ? 'wasm/base64.wasm' : 'wasm/base64-simd.wasm'
+  // );
   base64 = base64.replace(/=/g, ''); // this is super fast and does not hurt performance, simplifies logic
   let n = base64.length;
   let rem = n % 4;

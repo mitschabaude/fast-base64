@@ -5,6 +5,8 @@ import {
   toBytesSimple,
   toBytesCharCodeAt,
   toBytesStringLookup,
+  toBytesDataUri,
+  toBase64DataUri,
 } from './base64-alternative.js';
 
 const n = 1000000;
@@ -12,10 +14,10 @@ const n = 1000000;
 (async () => {
   // check correctness
   let [base64, bytes] = randomBase64(Math.ceil(Math.random() * 100));
-  await toBytes(base64, true);
+  await toBytes(base64);
   let bytes1 = toBytesSimple(base64);
   let bytes2 = toBytesJs(base64);
-  let bytes3 = await toBytes(base64);
+  let bytes3 = await toBytes(base64, true);
   if (
     Array.from(bytes1).some((x, i) => x !== bytes2[i]) ||
     Array.from(bytes1).some((x, i) => x !== bytes2[i])
@@ -91,6 +93,12 @@ const n = 1000000;
   console.log(
     `base64 to bytes (js string) ${(performance.now() - start).toFixed(2)} ms`
   );
+
+  start = performance.now();
+  await toBytesDataUri(base64);
+  console.log(
+    `base64 to bytes (js datauri) ${(performance.now() - start).toFixed(2)} ms`
+  );
   console.log('===========');
 
   start = performance.now();
@@ -107,6 +115,12 @@ const n = 1000000;
   toBase64Js(bytes);
   console.log(
     `bytes to base64 (js fast) ${(performance.now() - start).toFixed(2)} ms`
+  );
+
+  start = performance.now();
+  await toBase64DataUri(bytes);
+  console.log(
+    `bytes to base64 (js datauri) ${(performance.now() - start).toFixed(2)} ms`
   );
 })();
 

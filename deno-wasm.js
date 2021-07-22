@@ -1,5 +1,5 @@
 /* eslint-disable */
-export {getWatModule, allocate, memory};
+export {getWatModule, getWasmModule, allocate, memory};
 
 const memory = new WebAssembly.Memory({initial: 0});
 const wasmPromises = {};
@@ -17,16 +17,44 @@ function allocate(n) {
   }
 }
 
-function getWatModule(path) {
+function getWasmModule(path) {
   let wasmPromise = wasmPromises[path];
   if (wasmPromise === undefined) {
     wasmPromise = (async () => {
-      const wasmPath = path.replace('wat/', 'wasm/').replace('.wat', '.wasm');
-      console.log(wasmPath);
-      const p = Deno.run({
-        cmd: ['npx', 'wat2wasm', '--enable-all', path, '-o', wasmPath],
+      const wasmCode = await Deno.readFile(path);
+      const {instance} = await WebAssembly.instantiate(wasmCode, {
+        imports: {
+          memory,
+          log: console.log,
+        },
       });
-      await p.status();
+      return instance.exports;
+    })();
+    wasmPromises[path] = wasmPromise;
+  }
+  return wasmPromise;
+}
+
+function getWatModule(watPath, inlineFunctions = true) {
+  let wasmPromise = wasmPromises[watPath];
+  if (wasmPromise === undefined) {
+    wasmPromise = (async () => {
+      const wasmPath = watPath
+        .replace('wat/', 'wasm/')
+        .replace('.wat', '.wasm');
+      console.log(wasmPath);
+
+      if (inlineFunctions) {
+        const p = Deno.run({
+          cmd: ['node', 'wat2wasm-inline.js', watPath],
+        });
+        await p.status();
+      } else {
+        const p = Deno.run({
+          cmd: ['npx', 'wat2wasm', '--enable-all', watPath, '-o', wasmPath],
+        });
+        await p.status();
+      }
 
       const wasmCode = await Deno.readFile(wasmPath);
 
@@ -38,7 +66,7 @@ function getWatModule(path) {
       });
       return instance.exports;
     })();
-    wasmPromises[path] = wasmPromise;
+    wasmPromises[watPath] = wasmPromise;
   }
   return wasmPromise;
 }
