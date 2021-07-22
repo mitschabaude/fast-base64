@@ -10,7 +10,7 @@ import {
   toBase64StringLookup,
 } from './base64-alternative.js';
 
-const n = 1000000;
+const n = 100000;
 
 (async () => {
   // check correctness
@@ -50,12 +50,6 @@ const n = 1000000;
 
   let start;
   [base64, bytes] = randomBase64(n);
-
-  start = performance.now();
-  await toBytes(base64);
-  console.log(
-    `base64 to bytes (wasm) ${(performance.now() - start).toFixed(2)} ms`
-  );
 
   start = performance.now();
   await toBytes(base64);

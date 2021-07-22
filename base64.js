@@ -40,7 +40,7 @@ function toBase64Js(bytes) {
     encoded[i + 3] = encodeLookup[y3 & 0x3f];
   }
 
-  let base64 = new TextDecoder().decode(encoded.subarray(0, n));
+  let base64 = new TextDecoder().decode(new Uint8Array(encoded.buffer, 0, n));
   if (k === 1) base64 += '==';
   if (k === 2) base64 += '=';
   return base64;
