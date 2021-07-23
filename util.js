@@ -12,9 +12,9 @@ function originalToUrl(url) {
 }
 
 function concat(...arrays) {
-  if (!arrays.length) return null;
+  if (!arrays.length) return new Uint8Array(0);
 
-  let totalLength = arrays.reduce((acc, value) => acc + value.length, 0);
+  let totalLength = arrays.reduce((sum, array) => sum + array.length, 0);
   let result = new Uint8Array(totalLength);
 
   let length = 0;

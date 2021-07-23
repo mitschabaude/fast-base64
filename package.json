@@ -6,7 +6,11 @@
   "author": "gregor <gregor.mitscha-baude@gmx.at>",
   "license": "MIT",
   "dependencies": {
+    "wasm-feature-detect": "^1.2.11"
+  },
+  "devDependencies": {
     "binaryen": "^101.0.0",
+    "chrode": "^0.2.3",
     "wabt": "^1.0.23"
   }
 }

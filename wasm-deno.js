@@ -46,7 +46,7 @@ function getWatModule(watPath, inlineFunctions = true) {
 
       if (inlineFunctions) {
         const p = Deno.run({
-          cmd: ['node', 'wat2wasm-inline.js', watPath],
+          cmd: ['node', 'wasm-inline.js', watPath],
         });
         await p.status();
       } else {
