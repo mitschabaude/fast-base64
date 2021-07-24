@@ -1,6 +1,7 @@
 export {toBase64Js, toBytesJs};
 
 const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
 function toBytesJs(base64) {
   base64 = base64.replace(/=/g, '');
@@ -8,18 +9,20 @@ function toBytesJs(base64) {
   let rem = n % 4;
   let k = rem && rem - 1; // how many bytes the last base64 chunk encodes
   let m = (n >> 2) * 3 + k; // total encoded bytes
-  const encoded = encoder.encode(base64 + '===');
+
+  let encoded = new Uint8Array(n + 3);
+  encoder.encodeInto(base64 + '===', encoded);
 
   for (let i = 0, j = 0; i < n; i += 4, j += 3) {
-    let x1 = lookup[encoded[i + 0]] << 18;
-    let x2 = lookup[encoded[i + 1]] << 12;
-    let x3 = lookup[encoded[i + 2]] << 6;
-    let x4 = lookup[encoded[i + 3]];
-    encoded[j + 0] = (x1 + x2) >> 16;
-    encoded[j + 1] = ((x2 + x3) >> 8) & 0xff;
-    encoded[j + 2] = (x3 + x4) & 0xff;
+    let x =
+      (lookup[encoded[i]] << 18) +
+      (lookup[encoded[i + 1]] << 12) +
+      (lookup[encoded[i + 2]] << 6) +
+      lookup[encoded[i + 3]];
+    encoded[j] = x >> 16;
+    encoded[j + 1] = (x >> 8) & 0xff;
+    encoded[j + 2] = x & 0xff;
   }
-
   return new Uint8Array(encoded.buffer, 0, m);
 }
 
@@ -31,16 +34,14 @@ function toBase64Js(bytes) {
   let encoded = new Uint8Array(N);
 
   for (let i = 0, j = 0; j < m; i += 4, j += 3) {
-    let y1 = bytes[j + 0] << 16;
-    let y2 = bytes[j + 1] << 8;
-    let y3 = bytes[j + 2] | 0;
-    encoded[i + 0] = encodeLookup[y1 >> 18];
-    encoded[i + 1] = encodeLookup[((y1 + y2) >> 12) & 0x3f];
-    encoded[i + 2] = encodeLookup[((y2 + y3) >> 6) & 0x3f];
-    encoded[i + 3] = encodeLookup[y3 & 0x3f];
+    let y = (bytes[j] << 16) + (bytes[j + 1] << 8) + (bytes[j + 2] | 0);
+    encoded[i] = encodeLookup[y >> 18];
+    encoded[i + 1] = encodeLookup[(y >> 12) & 0x3f];
+    encoded[i + 2] = encodeLookup[(y >> 6) & 0x3f];
+    encoded[i + 3] = encodeLookup[y & 0x3f];
   }
 
-  let base64 = new TextDecoder().decode(new Uint8Array(encoded.buffer, 0, n));
+  let base64 = decoder.decode(new Uint8Array(encoded.buffer, 0, n));
   if (k === 1) base64 += '==';
   if (k === 2) base64 += '=';
   return base64;

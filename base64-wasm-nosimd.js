@@ -4,6 +4,7 @@ import {getModule} from './wasm-browser';
 export {toBytesNoSimd, toBase64NoSimd};
 
 const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
 async function toBytesNoSimd(base64) {
   base64 = base64.replace(/=/g, ''); // this is super fast and does not hurt performance, simplifies logic
@@ -17,8 +18,7 @@ async function toBytesNoSimd(base64) {
   });
 
   let encoded = new Uint8Array(memory.buffer, 0, n);
-  let tmp = encoder.encode(base64);
-  encoded.set(tmp);
+  encoder.encodeInto(base64, encoded);
 
   base642bytes(n);
   return new Uint8Array(memory.buffer, 0, m);
@@ -41,7 +41,7 @@ async function toBase64NoSimd(bytes) {
   bytes2base64(m, M);
 
   let encoded = new Uint8Array(memory.buffer, M, n);
-  let base64 = new TextDecoder().decode(encoded);
+  let base64 = decoder.decode(encoded);
   if (k === 1) base64 += '==';
   if (k === 2) base64 += '=';
   return base64;

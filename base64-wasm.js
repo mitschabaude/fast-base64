@@ -5,6 +5,7 @@ import {getModule} from './wasm-browser';
 export {toBytes, toBase64};
 
 const encoder = new TextEncoder();
+const decoder = new TextDecoder();
 
 async function toBytes(base64) {
   base64 = base64.replace(/=/g, ''); // this is super fast and does not hurt performance, simplifies logic
@@ -17,12 +18,21 @@ async function toBytes(base64) {
     allocate: n,
     fallback: base64Wasm,
   });
-
   let encoded = new Uint8Array(memory.buffer, 0, n);
-  let tmp = encoder.encode(base64);
-  encoded.set(tmp);
+  // let start = performance.now();
+  encoder.encodeInto(base64, encoded);
+  // let tmp = encoder.encode(base64);
+  // encoded.set(tmp);
+
+  // console.log(
+  //   `wasm - encoder.encode ${(performance.now() - start).toFixed(2)} ms`
+  // );
+  // start = performance.now();
 
   base642bytes(n);
+  // console.log(
+  //   `wasm - RAW FUNCTION ${(performance.now() - start).toFixed(2)} ms`
+  // );
   return new Uint8Array(memory.buffer, 0, m);
 }
 
@@ -44,7 +54,7 @@ async function toBase64(bytes) {
   bytes2base64(m, M);
 
   let encoded = new Uint8Array(memory.buffer, M, n);
-  let base64 = new TextDecoder().decode(encoded);
+  let base64 = decoder.decode(encoded);
   if (k === 1) base64 += '==';
   if (k === 2) base64 += '=';
   return base64;
