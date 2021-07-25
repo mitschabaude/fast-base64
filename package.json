@@ -1,16 +1,24 @@
 {
   "name": "fast-base64",
   "version": "0.1.0",
-  "main": "base64.js",
-  "type": "module",
   "author": "gregor <gregor.mitscha-baude@gmx.at>",
   "license": "MIT",
-  "dependencies": {
-    "wasm-feature-detect": "^1.2.11"
+  "type": "module",
+  "main": "base64-wasm-small.js",
+  "exports": {
+    ".": {
+      "import": "./base64-wasm-small.js",
+      "require": "./base64-wasm-small.js"
+    }
   },
+  "files": [
+    "base64-wasm-small.js"
+  ],
+  "dependencies": {},
   "devDependencies": {
     "binaryen": "^101.0.0",
     "chrode": "^0.2.3",
+    "esbuild": "^0.12.15",
     "wabt": "^1.0.23"
   }
 }

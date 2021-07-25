@@ -40,9 +40,6 @@ function allocateMemory(n) {
     const missingPages = Math.ceil(
       (n - memory.buffer.byteLength) / bytesPerPage
     );
-    // console.log(
-    //   `allocating ${missingPages * bytesPerPage} new bytes of memory`
-    // );
     memory.grow(missingPages);
   }
 }

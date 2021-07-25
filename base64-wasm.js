@@ -8,31 +8,20 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 async function toBytes(base64) {
-  base64 = base64.replace(/=/g, ''); // this is super fast and does not hurt performance, simplifies logic
+  base64 = base64.replace(/=/g, '');
   let n = base64.length;
   let rem = n % 4;
-  let k = rem && rem - 1; // how many bytes the last base64 chunk encodes
-  let m = (n >> 2) * 3 + k; // total encoded bytes
+  let k = rem && rem - 1;
+  let m = (n >> 2) * 3 + k;
 
   const {base642bytes, memory} = await getModule('base64', base64SimdWasm, {
     allocate: n,
     fallback: base64Wasm,
   });
   let encoded = new Uint8Array(memory.buffer, 0, n);
-  // let start = performance.now();
   encoder.encodeInto(base64, encoded);
-  // let tmp = encoder.encode(base64);
-  // encoded.set(tmp);
-
-  // console.log(
-  //   `wasm - encoder.encode ${(performance.now() - start).toFixed(2)} ms`
-  // );
-  // start = performance.now();
 
   base642bytes(n);
-  // console.log(
-  //   `wasm - RAW FUNCTION ${(performance.now() - start).toFixed(2)} ms`
-  // );
   return new Uint8Array(memory.buffer, 0, m);
 }
 

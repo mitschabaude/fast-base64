@@ -20,11 +20,11 @@ function toBytesSimple(str) {
 
 function toBase64Simple(bytes) {
   let n = bytes.length;
-  let rawStr = '';
+  let chars = new Array(n);
   for (let i = 0; i < n; i++) {
-    rawStr += String.fromCharCode(bytes[i]);
+    chars[i] = String.fromCharCode(bytes[i]);
   }
-  return btoa(rawStr);
+  return btoa(chars.join(''));
 }
 
 async function toBytesDataUri(base64) {
@@ -34,15 +34,12 @@ async function toBytesDataUri(base64) {
 
 async function toBase64DataUri(bytes) {
   let reader = new FileReader();
-  let base64Promise = new Promise(resolve => {
-    reader.addEventListener('load', () => resolve(reader.result));
+  let promise = new Promise(resolve => {
+    reader.onload = () => resolve(reader.result);
   });
   let blob = new Blob([bytes.buffer], {type: 'application/octet-stream'});
   reader.readAsDataURL(blob);
-  return (await base64Promise).replace(
-    'data:application/octet-stream;base64,',
-    ''
-  );
+  return (await promise).replace('data:application/octet-stream;base64,', '');
 }
 
 const alphabet =
