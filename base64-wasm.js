@@ -1,6 +1,6 @@
 import base64Wasm from './wasm/base64.wasm';
 import base64SimdWasm from './wasm/base64-simd.wasm';
-import {getModule} from './wasm-browser';
+import {getModule, free} from './wasm-browser';
 
 export {toBytes, toBase64};
 
@@ -22,6 +22,7 @@ async function toBytes(base64) {
   encoder.encodeInto(base64, encoded);
 
   base642bytes(n);
+  free('base64');
   return new Uint8Array(memory.buffer, 0, m);
 }
 
@@ -37,8 +38,10 @@ async function toBase64(bytes) {
     fallback: base64Wasm,
   });
 
-  let decoded = new Uint8Array(memory.buffer, 0, m);
+  let decoded = new Uint8Array(memory.buffer, 0, M);
   decoded.set(bytes);
+  decoded[m] = 0;
+  decoded[m + 1] = 0;
 
   bytes2base64(m, M);
 
@@ -46,5 +49,6 @@ async function toBase64(bytes) {
   let base64 = decoder.decode(encoded);
   if (k === 1) base64 += '==';
   if (k === 2) base64 += '=';
+  free('base64');
   return base64;
 }

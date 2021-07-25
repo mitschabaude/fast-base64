@@ -1,7 +1,11 @@
 import {toBytesJs, toBase64Js} from './base64.js';
 // import {toBytes, toBase64} from './base64-wasm-deno.js';
 import {toBytes, toBase64} from './base64-wasm.js';
-import {toBytesNoSimd, toBase64NoSimd} from './base64-wasm-nosimd.js';
+// import {toBytesNoSimd, toBase64NoSimd} from './base64-wasm-nosimd.js';
+import {
+  toBytes as toBytesNoSimd,
+  toBase64 as toBase64NoSimd,
+} from './base64-wasm-small.js';
 import {
   toBase64Simple,
   toBytesSimple,
@@ -112,37 +116,40 @@ function randomBase64(n) {
 }
 
 async function checkCorrectness() {
-  let [base64, bytes] = randomBase64(Math.ceil(Math.random() * 100));
-  await toBytes(base64);
-  let bytes1 = toBytesSimple(base64);
-  let bytes2 = toBytesJs(base64);
-  let bytes3 = await toBytesNoSimd(base64);
-  if (
-    Array.from(bytes1).some((x, i) => x !== bytes2[i]) ||
-    Array.from(bytes1).some((x, i) => x !== bytes2[i])
-  ) {
-    console.log('correct', bytes1);
-    console.log('ours (js)', bytes2);
-    throw Error('not equal');
-  }
-  if (
-    Array.from(bytes1).some((x, i) => x !== bytes3[i]) ||
-    Array.from(bytes3).some((x, i) => x !== bytes1[i])
-  ) {
-    console.log('correct', bytes1);
-    console.log('ours (wasm)', bytes3);
-    throw Error('not equal');
-  }
-  let base641 = await toBase64(bytes, true);
-  let base642 = toBase64Js(bytes);
-  if (base641 !== base64) {
-    console.log('correct', base64);
-    console.log('ours (wasm)', base641);
-    throw Error('not equal');
-  }
-  if (base642 !== base64) {
-    console.log('correct', base64);
-    console.log('ours (js)', base642);
-    throw Error('not equal');
+  for (let i = 0; i < 10; i++) {
+    let [base64, bytes] = randomBase64(Math.ceil(Math.random() * 100));
+    await toBytes(base64);
+    let bytes1 = toBytesSimple(base64);
+    let bytes2 = toBytesJs(base64);
+    let bytes3 = await toBytesNoSimd(base64);
+    if (
+      Array.from(bytes1).some((x, i) => x !== bytes2[i]) ||
+      Array.from(bytes1).some((x, i) => x !== bytes2[i])
+    ) {
+      console.log('correct', bytes1);
+      console.log('ours/js', bytes2);
+      throw Error('not equal');
+    }
+    if (
+      Array.from(bytes1).some((x, i) => x !== bytes3[i]) ||
+      Array.from(bytes3).some((x, i) => x !== bytes1[i])
+    ) {
+      console.log('correct', bytes1);
+      console.log('ours/wa', bytes3);
+      throw Error('not equal');
+    }
+    let base641 = await toBase64NoSimd(bytes);
+    let base642 = toBase64Js(bytes);
+    if (base641 !== base64) {
+      console.log('correct', base64);
+      console.log('ours/js', base642);
+      console.log('ours/wa', base641);
+      throw Error('not equal');
+    }
+    if (base642 !== base64) {
+      console.log('correct', base64);
+      console.log('ours/js', base642);
+      throw Error('not equal');
+    }
   }
 }

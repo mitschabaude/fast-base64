@@ -1,14 +1,28 @@
 {
   "name": "fast-base64",
+  "description": "Fastest possible base64 encoding/decoding using WebAssembly",
   "version": "0.1.0",
   "author": "gregor <gregor.mitscha-baude@gmx.at>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mitchabaude/fast-base64"
+  },
+  "keywords": [
+    "base64",
+    "wasm",
+    "fast"
+  ],
   "type": "module",
   "main": "base64-wasm-small.js",
   "exports": {
     ".": {
       "import": "./base64-wasm-small.js",
       "require": "./base64-wasm-small.js"
+    },
+    "./simd": {
+      "import": "./base64-wasm.js",
+      "require": "./base64-wasm.js"
     }
   },
   "files": [

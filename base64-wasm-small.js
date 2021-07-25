@@ -3,7 +3,7 @@ export {toBytes, toBase64};
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 const bytesPerPage = 65536;
-let memory = new WebAssembly.Memory({initial: 1});
+let memory = new WebAssembly.Memory({initial: 0});
 
 let wasm64 =
   'AGFzbQEAAAABCgJgAX8AYAJ/fwACEwEHaW1wb3J0cwZtZW1vcnkCAAADAwIAAQcfAgxiYXNlNjQyYnl0' +
@@ -45,7 +45,7 @@ async function toBytes(base64) {
   encoder.encodeInto(base64, encoded);
 
   base642bytes(n);
-  free(n);
+  free();
   return new Uint8Array(memory.buffer, 0, m);
 }
 
@@ -59,8 +59,10 @@ async function toBase64(bytes) {
   let {bytes2base64} = (await wasmInstance).exports;
 
   allocate(M + N);
-  let decoded = new Uint8Array(memory.buffer, 0, m);
+  let decoded = new Uint8Array(memory.buffer, 0, M);
   decoded.set(bytes);
+  decoded[m] = 0;
+  decoded[m + 1] = 0;
 
   bytes2base64(m, M);
 
@@ -68,7 +70,7 @@ async function toBase64(bytes) {
   let base64 = decoder.decode(encoded);
   if (k === 1) base64 += '==';
   if (k === 2) base64 += '=';
-  free(M + N);
+  free();
   return base64;
 }
 
@@ -77,10 +79,10 @@ function allocate(n) {
     memory.grow(Math.ceil((n - memory.buffer.byteLength) / bytesPerPage));
   }
 }
-function free(n) {
-  if (n < 1e6) return;
+function free() {
+  if (memory.buffer.byteLength < 1e6) return;
   setTimeout(async () => {
-    memory = new WebAssembly.Memory({initial: 1});
+    memory = new WebAssembly.Memory({initial: 0});
     wasmInstance = WebAssembly.instantiate(await wasmModule, {
       imports: {memory},
     });
