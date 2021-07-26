@@ -1,3 +1,4 @@
 #*.wasm
 .vscode
 node_modules
+dist

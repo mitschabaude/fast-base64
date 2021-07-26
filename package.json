@@ -14,25 +14,37 @@
     "fast"
   ],
   "type": "module",
-  "main": "base64-wasm-small.js",
+  "main": "./dist/base64-wasm.js",
   "exports": {
     ".": {
+      "import": "./dist/base64-wasm.js",
+      "require": "./dist/base64-wasm.js"
+    },
+    "./small": {
       "import": "./base64-wasm-small.js",
       "require": "./base64-wasm-small.js"
     },
-    "./simd": {
-      "import": "./base64-wasm.js",
-      "require": "./base64-wasm.js"
+    "./js": {
+      "import": "./base64-js.js",
+      "require": "./base64-js.js"
+    },
+    "./util": {
+      "import": "./util.js",
+      "require": "./util.js"
     }
   },
   "files": [
-    "base64-wasm-small.js"
+    "dist",
+    "base64-js.js",
+    "base64-wasm-small.js",
+    "util.js"
   ],
   "dependencies": {},
   "devDependencies": {
     "binaryen": "^101.0.0",
     "chrode": "^0.2.3",
     "esbuild": "^0.12.15",
+    "eslint": "^7.31.0",
     "wabt": "^1.0.23"
   }
 }

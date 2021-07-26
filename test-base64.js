@@ -1,11 +1,9 @@
-import {toBytesJs, toBase64Js} from './base64.js';
-// import {toBytes, toBase64} from './base64-wasm-deno.js';
-import {toBytes, toBase64} from './base64-wasm.js';
-// import {toBytesNoSimd, toBase64NoSimd} from './base64-wasm-nosimd.js';
+import {toBytes, toBase64} from './dist/base64-wasm.js';
 import {
   toBytes as toBytesNoSimd,
   toBase64 as toBase64NoSimd,
 } from './base64-wasm-small.js';
+import {toBytes as toBytesJs, toBase64 as toBase64Js} from './base64-js.js';
 import {
   toBase64Simple,
   toBytesSimple,

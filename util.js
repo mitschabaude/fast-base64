@@ -1,4 +1,4 @@
-export {urlToOriginal, originalToUrl, concat};
+export {urlToOriginal, originalToUrl};
 
 function urlToOriginal(url) {
   return (
@@ -9,19 +9,4 @@ function urlToOriginal(url) {
 
 function originalToUrl(url) {
   return url.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
-function concat(...arrays) {
-  if (!arrays.length) return new Uint8Array(0);
-
-  let totalLength = arrays.reduce((sum, array) => sum + array.length, 0);
-  let result = new Uint8Array(totalLength);
-
-  let length = 0;
-  for (let array of arrays) {
-    result.set(array, length);
-    length += array.length;
-  }
-
-  return result;
 }

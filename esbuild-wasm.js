@@ -10,7 +10,7 @@ function build(scriptPath) {
   esbuild.build({
     bundle: true,
     entryPoints: [scriptPath],
-    minify: true,
+    // minify: true,
     // outfile: '',
     target: 'es2020',
     format: 'esm',

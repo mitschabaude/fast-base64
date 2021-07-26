@@ -1,9 +1,9 @@
-export {toBase64Js, toBytesJs};
+export {toBase64, toBytes};
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-function toBytesJs(base64) {
+function toBytes(base64) {
   base64 = base64.replace(/=/g, '');
   let n = base64.length;
   let rem = n % 4;
@@ -26,7 +26,7 @@ function toBytesJs(base64) {
   return new Uint8Array(encoded.buffer, 0, m);
 }
 
-function toBase64Js(bytes) {
+function toBase64(bytes) {
   let m = bytes.length;
   let k = m % 3;
   let n = Math.floor(m / 3) * 4 + (k && k + 1);

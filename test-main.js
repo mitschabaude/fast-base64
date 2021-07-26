@@ -1,8 +1,9 @@
-// this tests the exported package, works in:
+// this tests the main exported package, works in:
 // * modern browsers, <script type="module"/>
 // * node
 // * deno
-import {toBytes, toBase64} from './base64-wasm-small.js';
+import {toBytes, toBase64} from './dist/base64-wasm.js';
+// import {toBytes, toBase64} from './base64-wasm-small.js'; // <-- does not work in node
 
 (async () => {
   let base64 = 'SGVsbG8sIHdvcmxkIQ=='; // btoa('Hello, world!')
