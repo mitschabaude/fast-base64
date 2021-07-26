@@ -1,6 +1,7 @@
 /* eslint-env node */
 import esbuild from 'esbuild';
 import {fileURLToPath} from 'url';
+import watPlugin from './esbuild-plugin-wat.js';
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   build(process.argv[2]);
@@ -14,6 +15,6 @@ function build(scriptPath) {
     // outfile: '',
     target: 'es2020',
     format: 'esm',
-    loader: {'.wasm': 'base64'},
+    plugins: [watPlugin({inlineFunctions: true})],
   });
 }

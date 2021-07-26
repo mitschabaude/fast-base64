@@ -39,12 +39,18 @@
     "base64-wasm-small.js",
     "util.js"
   ],
+  "scripts": {
+    "build": "node esbuild-wat.js base64-wasm.js > dist/base64-wasm.js",
+    "test": "npx chrode test-base64.js"
+  },
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "^16.4.3",
     "binaryen": "^101.0.0",
     "chrode": "^0.2.3",
     "esbuild": "^0.12.15",
     "eslint": "^7.31.0",
+    "find-cache-dir": "^3.3.1",
     "wabt": "^1.0.23"
   }
 }

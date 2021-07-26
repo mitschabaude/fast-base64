@@ -11,7 +11,7 @@ if (isMain) {
   wasmInline(process.argv[2]);
 }
 
-async function wasmInline(wasmPath) {
+async function wasmInline(wasmPath, doWrite) {
   // can be called with either .wat or .wasm path
   // creates or overwrites the .wasm with functions inlined
   let isWasm = wasmPath.indexOf('.wasm') !== -1;
@@ -24,8 +24,8 @@ async function wasmInline(wasmPath) {
   let wasmBinary;
   if (isWat) {
     let watText = fs.readFileSync(wasmPath, {encoding: 'utf8'});
-    wasmPath = wasmPath.replace('wat/', 'wasm/').replace('.wat', '.wasm');
     let wabtModule = (await wabt()).parseWat(wasmPath, watText, {simd: true});
+    wasmPath = wasmPath.replace('wat/', 'wasm/').replace('.wat', '.wasm');
     wasmBinary = wabtModule.toBinary({}).buffer;
   } else {
     wasmBinary = fs.readFileSync(wasmPath);
@@ -40,6 +40,8 @@ async function wasmInline(wasmPath) {
   // module.optimize();
 
   wasmBinary = module.emitBinary();
-  fs.writeFileSync(wasmPath, wasmBinary);
+  if (doWrite) {
+    fs.writeFileSync(wasmPath, wasmBinary);
+  }
   return {bytes: wasmBinary, path: wasmPath};
 }
