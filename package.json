@@ -33,8 +33,15 @@
       "require": "./url.js"
     }
   },
-  "types": "index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./types/*"
+      ]
+    }
+  },
   "files": [
+    "types",
     "dist",
     "base64-js.js",
     "base64-wasm-small.js",
