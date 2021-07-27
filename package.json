@@ -1,12 +1,12 @@
 {
   "name": "fast-base64",
   "description": "Fastest possible base64 encoding/decoding using WebAssembly",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "gregor <gregor.mitscha-baude@gmx.at>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mitchabaude/fast-base64"
+    "url": "https://github.com/mitschabaude/fast-base64"
   },
   "keywords": [
     "base64",
@@ -33,10 +33,13 @@
       "require": "./url.js"
     }
   },
-  "types": "./types/index.d.ts",
+  "types": "./index.d.ts",
   "typesVersions": {
     "*": {
-      "./*": [
+      "./index.d.ts": [
+        "./types/index.d.ts"
+      ],
+      "*": [
         "./types/*"
       ]
     }
