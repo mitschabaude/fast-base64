@@ -39,7 +39,7 @@
       "*": [
         "./types/*"
       ],
-      "./types/index.d.ts": [
+      ".": [
         "./types/index.d.ts"
       ]
     }
