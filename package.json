@@ -28,11 +28,12 @@
       "import": "./base64-js.js",
       "require": "./base64-js.js"
     },
-    "./util": {
-      "import": "./util.js",
-      "require": "./util.js"
+    "./url": {
+      "import": "./url.js",
+      "require": "./url.js"
     }
   },
+  "types": "index.d.ts",
   "files": [
     "dist",
     "base64-js.js",
