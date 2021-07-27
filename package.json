@@ -33,6 +33,7 @@
       "require": "./url.js"
     }
   },
+  "types": "./types/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
