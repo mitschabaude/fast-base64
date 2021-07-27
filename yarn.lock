@@ -224,17 +224,19 @@ chownr@^1.1.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b"
   integrity sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==
 
-chrode@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/chrode/-/chrode-0.2.3.tgz#3f9ca8d43dc7f12c80267d863254ecb07d4d1752"
-  integrity sha512-QOpbpCr94xubVDZNc7xedPYprWCVnkmKnRtW96qWq+FlSfHrjfP9GxRlwJqHhz+G5uEIqb8l/SzRxg8KjyDVOQ==
+chrode@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/chrode/-/chrode-0.2.4.tgz#cc8d3a14faa2c461ff74a035cdb13b13d780ab8a"
+  integrity sha512-ZTzAM0lUKhaRjBqLIR+r8KUXiGlSM6Z2NtFKqFIk1Uf4qWuY5ELVGhFmGuAcqYhfjIMdFfff8XfVRaIKiZLneQ==
   dependencies:
     chalk "^4.1.1"
     command-line-args "^5.1.1"
     command-line-usage "^6.1.1"
     esbuild "^0.12.9"
+    find-cache-dir "^3.3.1"
     node-static "^0.7.11"
     puppeteer "^10.1.0"
+    wabt "^1.0.23"
 
 color-convert@^1.9.0:
   version "1.9.3"
