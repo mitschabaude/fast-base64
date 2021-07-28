@@ -20,7 +20,7 @@ let bytes = await toBytes('SGVsbG8sIHdvcmxkIQ==');
 let base64 = await toBase64(bytes);
 ```
 
-## Alternative exports
+## Alternative imports
 
 We support three versions of the library that have different speed and size trade-offs
 
@@ -39,7 +39,7 @@ let base64 = toBase64(bytes);
 
 ## Base64 URL
 
-To support base64url we offer two tiny, fast helper functions (the runtime overhead compared with base64 transcoding itself is negligible):
+To support base64url, we offer two tiny helper functions (the runtime overhead compared with base64 transcoding itself is negligible):
 
 ```js
 import {toUrl, fromUrl} from 'fast-base64/url';
@@ -47,7 +47,7 @@ import {toUrl, fromUrl} from 'fast-base64/url';
 let base64url = toUrl('/+A='); // "_-A"
 let base64 = fromUrl(base64url); // "/+A="
 
-// you could make our own helper functions for base64url
+// how to make our own base64url encoding/decoding functions
 const toBase64Url = async bytes => toUrl(await toBase64(bytes));
 const toBytesUrl = async base64url => await toBytes(fromUrl(base64url));
 ```
