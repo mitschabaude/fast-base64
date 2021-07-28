@@ -16,40 +16,36 @@ function watPlugin({inlineFunctions = false} = {}) {
     setup(build) {
       build.onLoad({filter: /.wat$/}, async ({path: watPath}) => {
         let watBytes = await fs.promises.readFile(watPath);
-        let {result, hash} = await fromCache(
-          watPath,
-          watBytes,
-          async watBytes => {
-            let watText = new TextDecoder().decode(watBytes);
-            let wabtModule = (await wabt()).parseWat(watPath, watText, {
-              simd: true,
-            });
-            let bytes = new Uint8Array(wabtModule.toBinary({}).buffer);
-            if (inlineFunctions) {
-              bytes = transformInlineFunctions(bytes);
-            }
-            return bytes;
-          }
-        );
-        let base64 = Buffer.from(result).toString('base64');
-        return {
-          contents: JSON.stringify({id: hash, base64}),
-          loader: 'json',
-        };
-      });
-
-      build.onLoad({filter: /.wasm$/}, async ({path: wasmPath}) => {
-        let bytes = await fs.promises.readFile(wasmPath);
-        let {result, hash} = await fromCache(wasmPath, bytes, bytes => {
+        let wasmBytes = await fromCache(watPath, watBytes, async watBytes => {
+          let watText = new TextDecoder().decode(watBytes);
+          let wabtModule = (await wabt()).parseWat(watPath, watText, {
+            simd: true,
+          });
+          let bytes = new Uint8Array(wabtModule.toBinary({}).buffer);
           if (inlineFunctions) {
             bytes = transformInlineFunctions(bytes);
           }
           return bytes;
         });
-        let base64 = Buffer.from(result).toString('base64');
+        let base64 = Buffer.from(wasmBytes).toString('base64');
         return {
-          contents: JSON.stringify({id: hash, base64}),
-          loader: 'json',
+          contents: `export default "${base64}";`,
+          loader: 'js',
+        };
+      });
+
+      build.onLoad({filter: /.wasm$/}, async ({path: wasmPath}) => {
+        let bytes = await fs.promises.readFile(wasmPath);
+        let wasmBytes = await fromCache(wasmPath, bytes, bytes => {
+          if (inlineFunctions) {
+            bytes = transformInlineFunctions(bytes);
+          }
+          return bytes;
+        });
+        let base64 = Buffer.from(wasmBytes).toString('base64');
+        return {
+          contents: `export default "${base64}";`,
+          loader: 'js',
         };
       });
     },
@@ -103,5 +99,5 @@ async function fromCache(key, content, transform) {
         );
       });
   }
-  return {result, hash: contentHash};
+  return result;
 }

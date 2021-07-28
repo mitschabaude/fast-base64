@@ -1,4 +1,4 @@
-import {toBytes, toBase64} from './dist/base64-wasm.js';
+import {toBytes, toBase64} from './base64-wasm.js';
 import {
   toBytes as toBytesNoSimd,
   toBase64 as toBase64NoSimd,
@@ -116,10 +116,14 @@ function randomBase64(n) {
 async function checkCorrectness() {
   for (let i = 0; i < 10; i++) {
     let [base64, bytes] = randomBase64(Math.ceil(Math.random() * 100));
-    await toBytes(base64);
     let bytes1 = toBytesSimple(base64);
     let bytes2 = toBytesJs(base64);
-    let bytes3 = await toBytesNoSimd(base64);
+    let [bytes3, , bytes4] = await Promise.all([
+      toBytesNoSimd(base64),
+      toBytes(base64),
+      toBytes(base64),
+      toBytes(base64),
+    ]);
     if (
       Array.from(bytes1).some((x, i) => x !== bytes2[i]) ||
       Array.from(bytes1).some((x, i) => x !== bytes2[i])
@@ -129,11 +133,19 @@ async function checkCorrectness() {
       throw Error('not equal');
     }
     if (
-      Array.from(bytes1).some((x, i) => x !== bytes3[i]) ||
-      Array.from(bytes3).some((x, i) => x !== bytes1[i])
+      bytes4.length !== bytes1.length ||
+      Array.from(bytes1).some((x, i) => x !== bytes4[i])
     ) {
-      console.log('correct', bytes1);
-      console.log('ours/wa', bytes3);
+      console.log('correct', bytes1.toString());
+      console.log('ours/wa', bytes4.toString());
+      throw Error('not equal');
+    }
+    if (
+      bytes3.length !== bytes1.length ||
+      Array.from(bytes1).some((x, i) => x !== bytes3[i])
+    ) {
+      console.log('correct', bytes1.toString());
+      console.log('ours/wa', bytes4.toString());
       throw Error('not equal');
     }
     let base641 = await toBase64NoSimd(bytes);
