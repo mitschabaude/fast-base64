@@ -42,7 +42,7 @@ async function toBase64(bytes) {
   decoded[m] = 0;
   decoded[m + 1] = 0;
 
-  bytes2base64(view.byteOffset, m, view.byteOffset + M);
+  bytes2base64(view.byteOffset, view.byteOffset + m, view.byteOffset + M);
 
   let encoded = new Uint8Array(memory.buffer, view.byteOffset + M, n);
   let base64 = decoder.decode(encoded);

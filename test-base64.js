@@ -118,9 +118,9 @@ async function checkCorrectness() {
     let [base64, bytes] = randomBase64(Math.ceil(Math.random() * 100));
     let bytes1 = toBytesSimple(base64);
     let bytes2 = toBytesJs(base64);
-    let [bytes3, , bytes4] = await Promise.all([
+    let [, bytes3, , bytes4] = await Promise.all([
       toBytesNoSimd(base64),
-      toBytes(base64),
+      toBytesNoSimd(base64),
       toBytes(base64),
       toBytes(base64),
     ]);
@@ -148,8 +148,12 @@ async function checkCorrectness() {
       console.log('ours/wa', bytes4.toString());
       throw Error('not equal');
     }
-    let base641 = await toBase64NoSimd(bytes);
-    let base642 = toBase64Js(bytes);
+    let [, base641, , base642] = await Promise.all([
+      toBase64NoSimd(bytes),
+      toBase64NoSimd(bytes),
+      toBase64Js(bytes),
+      toBase64Js(bytes),
+    ]);
     if (base641 !== base64) {
       console.log('correct', base64);
       console.log('ours/js', base642);

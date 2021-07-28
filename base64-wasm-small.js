@@ -3,7 +3,6 @@ export {toBytes, toBase64};
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 const bytesPerPage = 65536;
-let memory = new WebAssembly.Memory({initial: 0});
 
 let wasm64 =
   'AGFzbQEAAAABCgJgAX8AYAJ/fwACEwEHaW1wb3J0cwZtZW1vcnkCAAADAwIAAQcfAgxiYXNlNjQyYnl0' +
@@ -25,11 +24,8 @@ let wasmBytes = new Uint8Array(
   [...wasmStr].map((_, i) => wasmStr.charCodeAt(i))
 );
 
-// wasm takes ~1-2ms to instantiate
+// wasm takes ~1-2ms to compile
 let wasmModule = WebAssembly.compile(wasmBytes);
-let wasmInstance = wasmModule.then(m =>
-  WebAssembly.instantiate(m, {imports: {memory}})
-);
 
 async function toBytes(base64) {
   base64 = base64.replace(/=/g, '');
@@ -38,14 +34,12 @@ async function toBytes(base64) {
   let k = rem && rem - 1;
   let m = (n >> 2) * 3 + k;
 
-  let {base642bytes} = (await wasmInstance).exports;
+  let [{base642bytes}, memory] = await instantiate(n);
 
-  allocate(n);
   let encoded = new Uint8Array(memory.buffer, 0, n);
   encoder.encodeInto(base64, encoded);
 
   base642bytes(n);
-  free();
   return new Uint8Array(memory.buffer, 0, m);
 }
 
@@ -56,9 +50,7 @@ async function toBase64(bytes) {
   let M = m + 2;
   let N = Math.ceil(m / 3) * 4;
 
-  let {bytes2base64} = (await wasmInstance).exports;
-
-  allocate(M + N);
+  let [{bytes2base64}, memory] = await instantiate(M + N);
   let decoded = new Uint8Array(memory.buffer, 0, M);
   decoded.set(bytes);
   decoded[m] = 0;
@@ -70,21 +62,17 @@ async function toBase64(bytes) {
   let base64 = decoder.decode(encoded);
   if (k === 1) base64 += '==';
   if (k === 2) base64 += '=';
-  free();
   return base64;
 }
 
-function allocate(n) {
-  if (n > memory.buffer.byteLength) {
-    memory.grow(Math.ceil((n - memory.buffer.byteLength) / bytesPerPage));
-  }
-}
-function free() {
-  if (memory.buffer.byteLength < 1e6) return;
-  setTimeout(async () => {
-    memory = new WebAssembly.Memory({initial: 0});
-    wasmInstance = WebAssembly.instantiate(await wasmModule, {
-      imports: {memory},
-    });
-  }, 0);
+// this takes ~0.1-0.5 ms after initial compile
+async function instantiate(memSize) {
+  let memory = new WebAssembly.Memory({
+    initial: Math.ceil(memSize / bytesPerPage),
+  });
+  let compiled = await wasmModule;
+  let instance = await WebAssembly.instantiate(compiled, {
+    imports: {memory},
+  });
+  return [instance.exports, memory];
 }

@@ -123,12 +123,12 @@
   )
 
   (func $bytes2base64 (export "bytes2base64")
-    (param $offset i32) (param $m i32) (param $offset2 i32)
+    (param $start i32) (param $end i32) (param $offset i32)
     (local $i i32)
     (local $j i32)
     (local $x v128)
-    (local.set $i (local.get $offset2))
-    (local.set $j (local.get $offset))
+    (local.set $i (local.get $offset))
+    (local.set $j (local.get $start))
 
     (loop 
       local.get $j
@@ -237,7 +237,7 @@
 
       (local.set $i (i32.add (local.get $i) (i32.const 16)))
       (local.set $j (i32.add (local.get $j) (i32.const 12)))
-      (i32.lt_u (local.get $j) (local.get $m))
+      (i32.lt_u (local.get $j) (local.get $end))
       br_if 0
     )
   )
