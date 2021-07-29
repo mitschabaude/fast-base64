@@ -46,10 +46,6 @@ import {toUrl, fromUrl} from 'fast-base64/url';
 
 let base64url = toUrl('/+A='); // "_-A"
 let base64 = fromUrl(base64url); // "/+A="
-
-// how to make our own base64url encoding/decoding functions
-const toBase64Url = async bytes => toUrl(await toBase64(bytes));
-const toBytesUrl = async base64url => await toBytes(fromUrl(base64url));
 ```
 
 ## Curious about Base64?
