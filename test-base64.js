@@ -25,6 +25,7 @@ import {
   toBase64DataUri,
   toBase64StringLookup,
 } from './base64-alternative.js';
+import {toUrl, fromUrl} from './url.js';
 
 const n = 1000000;
 
@@ -154,6 +155,19 @@ const n = 1000000;
   toBase64Smallest(bytes);
   console.log(
     `bytes to base64 (js smallest) ${(performance.now() - start).toFixed(2)} ms`
+  );
+  console.log('===========');
+
+  start = performance.now();
+  let base64Url = toUrl(base64);
+  console.log(
+    `base64 to base64url ${(performance.now() - start).toFixed(2)} ms`
+  );
+
+  start = performance.now();
+  fromUrl(base64Url);
+  console.log(
+    `base64url to base64 ${(performance.now() - start).toFixed(2)} ms`
   );
 })();
 
