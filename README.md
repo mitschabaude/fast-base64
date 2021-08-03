@@ -28,7 +28,7 @@ We support three versions of the library that have different speed and size trad
 - `fast-base64`: The default is the fastest version, 1.9kB minzipped, **async** API
 - `fast-base64/small`: Version without SIMD, 1.0kB minzipped, **async** API, no `node` support, 2-3x slower
 - `fast-base64/js`: Fastest pure JS version, 600 bytes minzipped, **sync** API, 2-30x slower
-- `fast-base64/nano`: Smallest possible version, 147 bytes, **sync** API, 3-100x slower
+- `fast-base64/nano`: Smallest possible version, 147 bytes, **sync** API, no `node` support, 3-100x slower
 
 Example for using the pure JS version:
 
