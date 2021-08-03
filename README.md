@@ -48,6 +48,14 @@ let base64url = toUrl('/+A='); // "_-A"
 let base64 = fromUrl(base64url); // "/+A="
 ```
 
+## Wouldn't this be *even faster* with threading?
+
+Sadly, no. This repository includes variants of both the WASM and pure JS transcoders with threads, where I distribute the workload between multiple Web Workers and join their results once all are complete. You can check out the code in [./base64-wasm-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-wasm-threads.js) and [./base64-js-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-js-threads.js).
+
+These turn out to be not faster than the single-threaded versions, irrespective of the number of workers, except for very large payloads (> 1MB) in the pure JS versions where 3-4 workers can provide a speed-up of 1.5-2x. Especially the WASM versions with threads are clearly slower. They also come with a larger bundle size and worse browser support.
+
+As far as I can tell, the added overhead of slicing up the input, messaging to the workers and back, and rejoining the results is bigger than the gains in performing the actual calculation. Base64 in WASM is simply already faster than some Browser-native functions that are involved, like `postMessage()`, `TextEncoder.encode()` and `Uint8Array.splice()`.
+
 ## Curious about Base64?
 
 In making this package, I tried many different approaches for base64 encoding, including using the native `atob()` and `btoa()` functions and native dataURI functionality. You can find 4 alternative encoding and 3 decoding methods here: https://github.com/mitschabaude/fast-base64/blob/main/base64-alternative.js

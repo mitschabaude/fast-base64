@@ -224,10 +224,10 @@ chownr@^1.1.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b"
   integrity sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==
 
-chrode@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/chrode/-/chrode-0.2.5.tgz#a900f3e8609f57751f08cb726ce5e404d53c48e7"
-  integrity sha512-G5ilA+WD6t1nDW2bcjoi1iea2sh9kSdCd0ykkgo24sqPYPelkCu4fu1+e7I8E7tz8HeEaGDT2TW3aEd/w5PYmA==
+chrode@^0.2.7:
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/chrode/-/chrode-0.2.7.tgz#2dcc3f2e4811f0ca0f812388446202623faa087b"
+  integrity sha512-weN9RJeO16vk9iRQu1dUJwVSpvL7YfYaz2pdJa7cfciGKoUy/5tU+mahonhSabgscyucwiwHM2U4ZWUFsW+x+g==
   dependencies:
     chalk "^4.1.1"
     command-line-args "^5.1.1"

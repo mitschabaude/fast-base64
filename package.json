@@ -1,7 +1,7 @@
 {
   "name": "fast-base64",
   "description": "Fastest possible base64 encoding/decoding using WebAssembly",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "gregor <gregor.mitscha-baude@gmx.at>",
   "license": "MIT",
   "repository": {
@@ -59,7 +59,7 @@
   "devDependencies": {
     "@types/node": "^16.4.3",
     "binaryen": "^101.0.0",
-    "chrode": "^0.2.5",
+    "chrode": "^0.2.7",
     "esbuild": "^0.12.15",
     "eslint": "^7.31.0",
     "find-cache-dir": "^3.3.1",

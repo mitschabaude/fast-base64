@@ -11,7 +11,7 @@ if (isMain) {
   wasmInline(process.argv[2]);
 }
 
-async function wasmInline(wasmPath, doWrite) {
+async function wasmInline(wasmPath, doWrite = true) {
   // can be called with either .wat or .wasm path
   // creates or overwrites the .wasm with functions inlined
   let isWasm = wasmPath.indexOf('.wasm') !== -1;

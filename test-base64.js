@@ -1,9 +1,17 @@
-import {toBytes, toBase64} from './base64-wasm.js';
+import {toBytes, toBase64} from './dist/base64-wasm.js';
 import {
   toBytes as toBytesNoSimd,
   toBase64 as toBase64NoSimd,
 } from './base64-wasm-small.js';
 import {toBytes as toBytesJs, toBase64 as toBase64Js} from './base64-js.js';
+import {
+  toBytes as toBytesThreads,
+  toBase64 as toBase64Threads,
+} from './dist/base64-wasm-threads.js';
+import {
+  toBytes as toBytesJsThreads,
+  toBase64 as toBase64JsThreads,
+} from './dist/base64-js-threads.js';
 import {
   toBase64Simple,
   toBytesSimple,
@@ -37,6 +45,14 @@ const n = 1000000;
   );
 
   start = performance.now();
+  await toBytesThreads(base64);
+  console.log(
+    `base64 to bytes (wasm threads) ${(performance.now() - start).toFixed(
+      2
+    )} ms`
+  );
+
+  start = performance.now();
   toBytesSimple(base64);
   console.log(
     `base64 to bytes (js simple) ${(performance.now() - start).toFixed(2)} ms`
@@ -52,6 +68,12 @@ const n = 1000000;
   toBytesJs(base64);
   console.log(
     `base64 to bytes (js fast) ${(performance.now() - start).toFixed(2)} ms`
+  );
+
+  start = performance.now();
+  await toBytesJsThreads(base64);
+  console.log(
+    `base64 to bytes (js threads) ${(performance.now() - start).toFixed(2)} ms`
   );
 
   start = performance.now();
@@ -82,6 +104,14 @@ const n = 1000000;
   );
 
   start = performance.now();
+  await toBase64Threads(bytes);
+  console.log(
+    `bytes to base64 (wasm threads) ${(performance.now() - start).toFixed(
+      2
+    )} ms`
+  );
+
+  start = performance.now();
   toBase64Simple(bytes);
   console.log(
     `bytes to base64 (js simple) ${(performance.now() - start).toFixed(2)} ms`
@@ -90,6 +120,12 @@ const n = 1000000;
   toBase64Js(bytes);
   console.log(
     `bytes to base64 (js fast) ${(performance.now() - start).toFixed(2)} ms`
+  );
+
+  start = performance.now();
+  await toBase64JsThreads(bytes);
+  console.log(
+    `bytes to base64 (js threads) ${(performance.now() - start).toFixed(2)} ms`
   );
 
   start = performance.now();
@@ -124,6 +160,7 @@ async function checkCorrectness() {
       toBytes(base64),
       toBytes(base64),
     ]);
+    let bytes5 = await toBytesJsThreads(base64);
     if (
       Array.from(bytes1).some((x, i) => x !== bytes2[i]) ||
       Array.from(bytes1).some((x, i) => x !== bytes2[i])
@@ -148,21 +185,33 @@ async function checkCorrectness() {
       console.log('ours/wa', bytes4.toString());
       throw Error('not equal');
     }
-    let [, base641, , base642] = await Promise.all([
+    if (
+      bytes5.length !== bytes5.length ||
+      Array.from(bytes1).some((x, i) => x !== bytes5[i])
+    ) {
+      console.log('correct', bytes1.toString());
+      console.log('ours/js-threads', bytes5.toString());
+      throw Error('not equal');
+    }
+    let [, base641, base642, base643] = await Promise.all([
       toBase64NoSimd(bytes),
       toBase64NoSimd(bytes),
       toBase64Js(bytes),
-      toBase64Js(bytes),
+      toBase64JsThreads(bytes),
     ]);
     if (base641 !== base64) {
       console.log('correct', base64);
-      console.log('ours/js', base642);
       console.log('ours/wa', base641);
       throw Error('not equal');
     }
     if (base642 !== base64) {
       console.log('correct', base64);
       console.log('ours/js', base642);
+      throw Error('not equal');
+    }
+    if (base643 !== base64) {
+      console.log('correct', base64);
+      console.log('ours/js-threads', base643);
       throw Error('not equal');
     }
   }
