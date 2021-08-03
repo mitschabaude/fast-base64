@@ -43,7 +43,7 @@ DISCLAIMER: You probably don't *need* speed-optimized base64. `fast-base64/nano`
 
 ## Base64 URL
 
-To support base64url, we offer two tiny helper functions. The added runtime overhead when combining these with the fastest Wasm de-/encoder is about 2-4x, which should be fine for almost all circumstances.
+To support base64url, we offer two tiny helper functions. The added runtime overhead when combining these with the fastest de-/encoder is about 2-4x, which should be fine for almost all circumstances.
 
 ```js
 import {toUrl, fromUrl} from 'fast-base64/url';
