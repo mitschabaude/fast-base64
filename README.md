@@ -39,7 +39,7 @@ let bytes = toBytes('SGVsbG8sIHdvcmxkIQ=='); // no `await`!
 let base64 = toBase64(bytes);
 ```
 
-DISCLAIMER: You probably don't *need* speed-optimized base64. `fast-base64/nano`, the slowest of all versions that I tried, could even be the best choice for typical applications, because the speed difference will simply not be noticable if payloads are not huge. For example, on my laptop, 10kB of base64 decode in in 0.06ms with `fast-base64` and in 5ms with `fast-base64/nano`.
+DISCLAIMER: You probably don't *need* speed-optimized base64. `fast-base64/nano`, the slowest of all versions that I tried, could even be the best choice for typical applications, because the speed difference will simply not be noticable if payloads are not huge. For example, on my laptop, 10kB of base64 decode in 0.06ms with `fast-base64` and in 5ms with `fast-base64/nano`.
 
 ## Base64 URL
 
