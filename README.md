@@ -54,9 +54,9 @@ let base64 = fromUrl(base64url); // "/+A="
 
 ## Wouldn't this be *even faster* with threading?
 
-Sadly, no. This repository includes variants of both the WASM and pure JS transcoders with threads, where I distribute the workload between multiple Web Workers and join their results once all are complete. You can check out the code in [./base64-wasm-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-wasm-threads.js) and [./base64-js-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-js-threads.js).
+Sadly, no. This repository includes threaded variants of both the Wasm and pure JS encoding/decoding, where I distribute the workload between multiple Web Workers and join their results once all are complete. You can check out the code in [./base64-wasm-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-wasm-threads.js) and [./base64-js-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-js-threads.js).
 
-These turn out to be not faster than the single-threaded versions, irrespective of the number of workers, except for very large payloads (> 1MB) in the pure JS versions where 3-4 workers can provide a speed-up of 1.5-2x. Especially the WASM versions with threads are clearly slower. They also come with a larger bundle size and worse browser support.
+These turn out to be not faster than the single-threaded versions, irrespective of the number of workers, except for very large payloads (> 1MB) in the pure JS version (where 3-4 workers can provide a speed-up of 1.5-2x). Especially the Wasm version with threads is clearly slower. It also comes with a larger bundle size and worse browser support.
 
 As far as I can tell, the added overhead of slicing up the input, messaging to the workers and back, and rejoining the results is bigger than the gains in performing the actual calculation. Base64 in Wasm is simply already faster than some Browser-native functions that are involved, like `postMessage()`, `TextEncoder.encode()` and `Uint8Array.splice()`.
 
