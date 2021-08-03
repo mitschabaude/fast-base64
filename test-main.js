@@ -2,6 +2,7 @@
 // * modern browsers, <script type="module"/>
 // * node
 // * deno
+// import {toBytes, toBase64} from './base64-nano.js';
 import {toBytes, toBase64} from './dist/base64-wasm.js';
 // import {toBytes, toBase64} from './base64-wasm-small.js'; // <-- does not work in node
 

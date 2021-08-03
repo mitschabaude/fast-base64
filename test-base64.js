@@ -13,6 +13,10 @@ import {
   toBase64 as toBase64JsThreads,
 } from './dist/base64-js-threads.js';
 import {
+  toBytes as toBytesSmallest,
+  toBase64 as toBase64Smallest,
+} from './base64-nano.js';
+import {
   toBase64Simple,
   toBytesSimple,
   toBytesCharCodeAt,
@@ -87,6 +91,12 @@ const n = 1000000;
   console.log(
     `base64 to bytes (js datauri) ${(performance.now() - start).toFixed(2)} ms`
   );
+
+  start = performance.now();
+  toBytesSmallest(base64);
+  console.log(
+    `base64 to bytes (js smallest) ${(performance.now() - start).toFixed(2)} ms`
+  );
   console.log('===========');
 
   start = performance.now();
@@ -138,6 +148,12 @@ const n = 1000000;
   await toBase64DataUri(bytes);
   console.log(
     `bytes to base64 (js datauri) ${(performance.now() - start).toFixed(2)} ms`
+  );
+
+  start = performance.now();
+  toBase64Smallest(bytes);
+  console.log(
+    `bytes to base64 (js smallest) ${(performance.now() - start).toFixed(2)} ms`
   );
 })();
 

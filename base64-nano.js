@@ -1,0 +1,1 @@
+let y=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0)),a=b=>btoa([...b].map(x=>String.fromCharCode(x)).join(""));export{y as toBytes, a as toBase64};

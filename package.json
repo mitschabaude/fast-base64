@@ -28,6 +28,10 @@
       "import": "./base64-js.js",
       "require": "./base64-js.js"
     },
+    "./nano": {
+      "import": "./base64-nano.js",
+      "require": "./base64-nano.js"
+    },
     "./url": {
       "import": "./url.js",
       "require": "./url.js"
@@ -52,7 +56,7 @@
     "util.js"
   ],
   "scripts": {
-    "build": "mkdir -p dist && node esbuild-wat.js base64-wasm.js > dist/base64-wasm.js",
+    "build": "mkdir -p dist && node build-lib.js",
     "test": "npx chrode test-base64.js"
   },
   "dependencies": {},

@@ -51,6 +51,7 @@ async function toBase64(bytes) {
   let N = Math.ceil(m / 3) * 4;
 
   let [memory, view] = allocate(N + m + 2 * nWorkers);
+  let array = new Uint8Array(memory.buffer, view.byteOffset, view.byteLength);
 
   let j = Math.floor(m / nWorkers);
   j -= j % 3;
@@ -68,7 +69,8 @@ async function toBase64(bytes) {
         byteLength: j1 - j0 + 2,
         byteOffset: view.byteOffset + j0 + i * 2,
       };
-      return workers[i].toBase64(memory, workerView, bytes.slice(j0, j1));
+      array.set(bytes.slice(j0, j1), workerView.byteOffset);
+      return workers[i].toBase64(memory, workerView);
     })
   );
   free(memory, view);

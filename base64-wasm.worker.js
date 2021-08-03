@@ -28,8 +28,8 @@ async function toBytes(memory, view, base64) {
   // return decoded;
 }
 
-async function toBase64(memory, view, bytes) {
-  let m = bytes.length;
+async function toBase64(memory, view) {
+  let m = view.byteLength - 2;
   let k = m % 3;
   let n = Math.floor(m / 3) * 4 + (k && k + 1);
   let M = m + 2;
@@ -39,7 +39,6 @@ async function toBase64(memory, view, bytes) {
   const {bytes2base64} = await wasmModule({imports: {memory}});
 
   let decoded = new Uint8Array(memory.buffer, view.byteOffset, M);
-  decoded.set(bytes);
   decoded[m] = 0;
   decoded[m + 1] = 0;
 
