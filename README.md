@@ -30,7 +30,7 @@ We support four versions of the library that have different speed and size trade
 - `fast-base64/js`: Fastest pure JS version, 600 bytes minzipped, **sync** API, 2-30x slower
 - `fast-base64/nano`: Smallest possible version, 147 bytes, **sync** API, no `node` support, 3-100x slower
 
-The APIs are all equivalent, except that the latter two are synchronous. Here is an example for using the fast JS version:
+The APIs are all equivalent, except that the latter two are synchronous. Example for using the fast JS version:
 
 ```js
 import {toBytes, toBase64} from 'fast-base64/js';
@@ -43,7 +43,7 @@ DISCLAIMER: You probably don't _need_ speed-optimized base64. `fast-base64/nano`
 
 ## Base64 URL
 
-To support base64url, we offer two tiny helper functions. The added runtime overhead when combining these with the fastest de-/encoder is about 2-4x, which should be fine for almost all circumstances.
+To support base64url, we offer two tiny helper functions.
 
 ```js
 import {toUrl, fromUrl} from 'fast-base64/url';
@@ -51,6 +51,8 @@ import {toUrl, fromUrl} from 'fast-base64/url';
 let base64url = toUrl('/+A='); // "_-A"
 let base64 = fromUrl(base64url); // "/+A="
 ```
+
+The added runtime overhead when combining these with the fastest de-/encoder is about 2-4x, which should be fine for almost all circumstances.
 
 ## Wouldn't this be _even faster_ with threading?
 
