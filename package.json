@@ -62,6 +62,7 @@
     "binaryen": "^101.0.0",
     "chrode": "^0.2.7",
     "esbuild": "^0.12.15",
+    "esbuild-plugin-wat": "^0.1.1",
     "eslint": "^7.31.0",
     "find-cache-dir": "^3.3.1",
     "wabt": "^1.0.23"

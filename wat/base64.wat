@@ -1,13 +1,13 @@
 (module
   (import "imports" "memory" (memory 0))
 
-  (func $base642bytes (export "base642bytes") (param $n i32)
+  (func $base642bytes (export "base642bytes")
+    (param $start i32) (param $end i32)
     (local $i i32)
     (local $j i32)
     (local $x i32)
-
-    (local.set $i (i32.const 0))
-    (local.set $j (i32.const 0))
+    (local.set $i (local.get $start))
+    (local.set $j (local.get $start))
 
     (loop 
       (i32.load8_u (local.get $i))
@@ -57,18 +57,18 @@
 
       (local.set $i (i32.add (local.get $i) (i32.const 4)))
       (local.set $j (i32.add (local.get $j) (i32.const 3)))
-      (i32.lt_u (local.get $i) (local.get $n))
+      (i32.lt_u (local.get $i) (local.get $end))
       br_if 0
     )
   )
 
   (func $bytes2base64 (export "bytes2base64")
-   (param $m i32) (param $offset i32)
+    (param $start i32) (param $end i32) (param $offset i32)
     (local $i i32)
     (local $j i32)
     (local $x i32)
     (local.set $i (local.get $offset))
-    (local.set $j (i32.const 0))
+    (local.set $j (local.get $start))
 
     (loop
       local.get $j
@@ -123,7 +123,7 @@
 
       (local.set $i (i32.add (local.get $i) (i32.const 4)))
       (local.set $j (i32.add (local.get $j) (i32.const 3)))
-      (i32.lt_u (local.get $j) (local.get $m))
+      (i32.lt_u (local.get $j) (local.get $end))
       br_if 0
     )
   )

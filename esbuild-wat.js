@@ -1,12 +1,15 @@
 /* eslint-env node */
 import esbuild from 'esbuild';
 import {fileURLToPath} from 'url';
-import watPlugin from './esbuild-plugin-wat.js';
+import watPlugin from 'esbuild-plugin-wat';
 import inlineWorkerPlugin from './esbuild-plugin-inline-worker.js';
 
 export {build as default};
 
-let defaultPlugins = [inlineWorkerPlugin, watPlugin({inlineFunctions: true})];
+let defaultPlugins = [
+  inlineWorkerPlugin,
+  watPlugin({inlineFunctions: true, loader: 'base64'}),
+];
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   build(process.argv[2]);

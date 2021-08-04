@@ -33,8 +33,8 @@ async function instantiate(id, base64, importObject = {}, fallback) {
       let wasmCode = toBytesJs(base64);
       let promise = W.instantiate(wasmCode, importObject).catch(err => {
         if (fallback === undefined) throw err;
-        console.error(err);
-        console.log('falling back to version without experimental feature');
+        console.warn(err);
+        console.warn('falling back to version without experimental feature');
         wasmCode = toBytesJs(fallback);
         return W.instantiate(wasmCode, importObject);
       });
