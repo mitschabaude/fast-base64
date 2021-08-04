@@ -11,7 +11,9 @@
   "keywords": [
     "base64",
     "wasm",
-    "fast"
+    "simd",
+    "fast",
+    "deno"
   ],
   "type": "module",
   "main": "./dist/base64-wasm.js",
