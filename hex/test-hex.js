@@ -1,4 +1,4 @@
-import {getWatModule, allocate, memory} from '../deno-wasm.js';
+import {getWatModule, allocate, memory} from './wasm-deno.js';
 
 const n = 1000000;
 

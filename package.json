@@ -17,24 +17,19 @@
   "main": "./dist/base64-wasm.js",
   "exports": {
     ".": {
-      "import": "./dist/base64-wasm.js",
-      "require": "./dist/base64-wasm.js"
+      "import": "./dist/base64-wasm.js"
     },
     "./small": {
-      "import": "./base64-wasm-small.js",
-      "require": "./base64-wasm-small.js"
+      "import": "./base64-wasm-small.js"
     },
     "./js": {
-      "import": "./base64-js.js",
-      "require": "./base64-js.js"
+      "import": "./base64-js.js"
     },
     "./nano": {
-      "import": "./base64-nano.js",
-      "require": "./base64-nano.js"
+      "import": "./base64-nano.js"
     },
     "./url": {
-      "import": "./url.js",
-      "require": "./url.js"
+      "import": "./url.js"
     }
   },
   "types": "./index.d.ts",

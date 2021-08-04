@@ -40,13 +40,13 @@ function getWatModule(watPath, inlineFunctions = true) {
   if (wasmPromise === undefined) {
     wasmPromise = (async () => {
       const wasmPath = watPath
-        .replace('wat/', 'wasm/')
+        // .replace('wat/', 'wasm/')
         .replace('.wat', '.wasm');
       console.log(wasmPath);
 
       if (inlineFunctions) {
         const p = Deno.run({
-          cmd: ['node', 'wasm-inline.js', watPath],
+          cmd: ['node', '../wasm-inline.js', watPath],
         });
         await p.status();
       } else {
