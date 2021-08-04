@@ -1,7 +1,7 @@
 {
   "name": "fast-base64",
   "description": "Fastest possible base64 encoding/decoding using WebAssembly",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "gregor <gregor.mitscha-baude@gmx.at>",
   "license": "MIT",
   "repository": {
@@ -50,7 +50,8 @@
     "dist",
     "base64-js.js",
     "base64-wasm-small.js",
-    "util.js"
+    "base64-nano.js",
+    "url.js"
   ],
   "scripts": {
     "build": "mkdir -p dist && node build-lib.js",
