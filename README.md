@@ -23,14 +23,14 @@ let base64 = await toBase64(bytes);
 
 ## Alternative imports
 
-We support three versions of the library that have different speed and size trade-offs
+We support four versions of the library that have different speed and size trade-offs.
 
 - `fast-base64`: The default is the fastest version, 1.9kB minzipped, **async** API
 - `fast-base64/small`: Version without SIMD, 1.0kB minzipped, **async** API, no `node` support, 2-3x slower
 - `fast-base64/js`: Fastest pure JS version, 600 bytes minzipped, **sync** API, 2-30x slower
 - `fast-base64/nano`: Smallest possible version, 147 bytes, **sync** API, no `node` support, 3-100x slower
 
-Example for using the pure JS version:
+The APIs are all equivalent, except that the latter two are synchronous. Here is an example for using the fast JS version:
 
 ```js
 import {toBytes, toBase64} from 'fast-base64/js';
@@ -39,7 +39,7 @@ let bytes = toBytes('SGVsbG8sIHdvcmxkIQ=='); // no `await`!
 let base64 = toBase64(bytes);
 ```
 
-DISCLAIMER: You probably don't *need* speed-optimized base64. `fast-base64/nano`, the slowest of all versions that I tried, could even be the best choice for typical applications, because the speed difference will simply not be noticable if payloads are not huge. For example, on my laptop, 10kB of base64 decode in 0.06ms with `fast-base64` and in 5ms with `fast-base64/nano`.
+DISCLAIMER: You probably don't _need_ speed-optimized base64. `fast-base64/nano`, the slowest of all versions that I tried, could even be the best choice for typical applications, because the speed difference will simply not be noticable if payloads are not huge. For example, on my laptop, 10kB of base64 decode in 0.06ms with `fast-base64` and in 5ms with `fast-base64/nano`.
 
 ## Base64 URL
 
@@ -52,7 +52,7 @@ let base64url = toUrl('/+A='); // "_-A"
 let base64 = fromUrl(base64url); // "/+A="
 ```
 
-## Wouldn't this be *even faster* with threading?
+## Wouldn't this be _even faster_ with threading?
 
 Sadly, no. This repository includes threaded variants of both the Wasm and pure JS encoding/decoding, where I distribute the workload between multiple Web Workers and join their results once all are complete. You can check out the code in [./base64-wasm-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-wasm-threads.js) and [./base64-js-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-js-threads.js).
 
@@ -81,9 +81,9 @@ async function toBase64DataUri(bytes) {
 Oh, and maybe you can decipher `fast-base64/nano`?
 
 ```js
-let y=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0)),
-a=b=>btoa([...b].map(x=>String.fromCharCode(x)).join(""));
-export{y as toBytes, a as toBase64};
+let y = s => Uint8Array.from(atob(s), c => c.charCodeAt(0)),
+  a = b => btoa([...b].map(x => String.fromCharCode(x)).join(''));
+export {y as toBytes, a as toBase64};
 ```
 
 If you want to compare and possibly tune performance by yourself, try running `yarn build` and `npx chrodemon test-base64.js` in the cloned repo.
