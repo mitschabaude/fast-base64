@@ -54,15 +54,16 @@
     "url.js"
   ],
   "scripts": {
-    "build": "mkdir -p dist && node build-lib.js",
+    "build": "node build-lib.js",
     "test": "npx chrode test-base64.js"
   },
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^16.4.3",
     "binaryen": "^101.0.0",
-    "chrode": "^0.2.7",
+    "chrode": "^0.2.8",
     "esbuild": "^0.12.15",
+    "esbuild-plugin-inline-worker": "^0.1.0",
     "esbuild-plugin-wat": "^0.1.1",
     "eslint": "^7.31.0",
     "find-cache-dir": "^3.3.1",

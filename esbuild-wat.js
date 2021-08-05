@@ -2,12 +2,15 @@
 import esbuild from 'esbuild';
 import {fileURLToPath} from 'url';
 import watPlugin from 'esbuild-plugin-wat';
-import inlineWorkerPlugin from './esbuild-plugin-inline-worker.js';
+import inlineWorkerPlugin from 'esbuild-plugin-inline-worker';
 
 export {build as default};
 
 let defaultPlugins = [
-  inlineWorkerPlugin,
+  inlineWorkerPlugin({
+    target: 'es2020',
+    plugins: [watPlugin({inlineFunctions: true, loader: 'base64'})],
+  }),
   watPlugin({inlineFunctions: true, loader: 'base64'}),
 ];
 
