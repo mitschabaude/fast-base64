@@ -370,14 +370,13 @@ esbuild-plugin-inline-worker@^0.1.0:
     esbuild latest
     find-cache-dir "^3.3.1"
 
-esbuild-plugin-wat@^0.1.1:
+esbuild-plugin-inline-worker@^0.1.1:
   version "0.1.1"
-  resolved "https://registry.yarnpkg.com/esbuild-plugin-wat/-/esbuild-plugin-wat-0.1.1.tgz#df91c18126cfa399655dcf8da5275a4c75ef1123"
-  integrity sha512-lC8LjpAM1nPw/OS4oDE5PW0x29Ft2Rrhe7sbPwT3NM5Q32EKmflAYiP8VTGCOy5qKR5VG8cr4BDwX5MykcDaxw==
+  resolved "https://registry.yarnpkg.com/esbuild-plugin-inline-worker/-/esbuild-plugin-inline-worker-0.1.1.tgz#f21a610ad7410972a408272e0d254654381eac58"
+  integrity sha512-VmFqsQKxUlbM51C1y5bRiMeyc1x2yTdMXhKB6S//++g9aCBg8TfGsbKxl5ZDkCGquqLY+RmEk93TBNd0i35dPA==
   dependencies:
-    binaryen latest
+    esbuild latest
     find-cache-dir "^3.3.1"
-    wabt latest
 
 esbuild-plugin-wat@^0.1.3:
   version "0.1.3"
