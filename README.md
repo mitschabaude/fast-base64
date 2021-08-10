@@ -21,6 +21,12 @@ let bytes = await toBytes('SGVsbG8sIHdvcmxkIQ==');
 let base64 = await toBase64(bytes);
 ```
 
+Or, using `deno`:
+
+```js
+import {toBytes, toBase64} from 'https://deno.land/x/fast_base64/mod.ts'
+```
+
 ## Alternative imports
 
 We support four versions of the library that have different speed and size trade-offs.
