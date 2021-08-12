@@ -28,6 +28,8 @@ import {
 import {toUrl, fromUrl} from './url.js';
 
 const n = 1000000;
+let decoder = new TextDecoder();
+let encoder = new TextEncoder();
 
 (async () => {
   await checkCorrectness();
@@ -36,9 +38,9 @@ const n = 1000000;
   let [base64, bytes] = randomBase64(n);
 
   start = performance.now();
-  await toBytesNoSimd(base64);
+  encoder.encodeInto(base64, new Uint8Array(base64.length));
   console.log(
-    `base64 to bytes (wasm, no simd) ${(performance.now() - start).toFixed(
+    `baseline: TextEncoder.encodeInto ${(performance.now() - start).toFixed(
       2
     )} ms`
   );
@@ -47,6 +49,14 @@ const n = 1000000;
   await toBytes(base64);
   console.log(
     `base64 to bytes (wasm) ${(performance.now() - start).toFixed(2)} ms`
+  );
+
+  start = performance.now();
+  await toBytesNoSimd(base64);
+  console.log(
+    `base64 to bytes (wasm, no simd) ${(performance.now() - start).toFixed(
+      2
+    )} ms`
   );
 
   start = performance.now();
@@ -100,18 +110,43 @@ const n = 1000000;
   );
   console.log('===========');
 
+  const alphabet =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  const encodeLookup = Object.fromEntries(
+    Array.from(alphabet).map((a, i) => [i, a.charCodeAt(0)])
+  );
+  let m = bytes.length;
+  let k = m % 3;
+  let nn = Math.floor(m / 3) * 4 + (k && k + 1);
+  let N = Math.ceil(m / 3) * 4;
+  let encoded = new Uint8Array(N);
+  for (let i = 0, j = 0; j < m; i += 4, j += 3) {
+    let y = (bytes[j] << 16) + (bytes[j + 1] << 8) + (bytes[j + 2] | 0);
+    encoded[i] = encodeLookup[y >> 18];
+    encoded[i + 1] = encodeLookup[(y >> 12) & 0x3f];
+    encoded[i + 2] = encodeLookup[(y >> 6) & 0x3f];
+    encoded[i + 3] = encodeLookup[y & 0x3f];
+  }
+  let encodedBytes = new Uint8Array(encoded.buffer, 0, nn);
+
   start = performance.now();
-  await toBase64NoSimd(bytes);
+  decoder.decode(encodedBytes);
   console.log(
-    `bytes to base64 (wasm, no simd) ${(performance.now() - start).toFixed(
-      2
-    )} ms`
+    `baseline: TextDecoder.decode ${(performance.now() - start).toFixed(2)} ms`
   );
 
   start = performance.now();
   await toBase64(bytes);
   console.log(
     `bytes to base64 (wasm) ${(performance.now() - start).toFixed(2)} ms`
+  );
+
+  start = performance.now();
+  await toBase64NoSimd(bytes);
+  console.log(
+    `bytes to base64 (wasm, no simd) ${(performance.now() - start).toFixed(
+      2
+    )} ms`
   );
 
   start = performance.now();
@@ -182,6 +217,8 @@ function randomBase64(n) {
 async function checkCorrectness() {
   for (let i = 0; i < 10; i++) {
     let [base64, bytes] = randomBase64(Math.ceil(Math.random() * 100));
+    encoder.encode(base64);
+    decoder.decode(bytes);
     let bytes1 = toBytesSimple(base64);
     let bytes2 = toBytesJs(base64);
     let [, bytes3, , bytes4] = await Promise.all([
