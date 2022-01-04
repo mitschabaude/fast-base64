@@ -1,4 +1,4 @@
-import Base64Worker from './base64-wasm.worker.js';
+import Base64Worker from './wasm.worker.js';
 import {workerImport} from './worker-tools.js';
 
 export {toBytes, toBase64};

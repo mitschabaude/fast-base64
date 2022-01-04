@@ -24,7 +24,7 @@ let base64 = await toBase64(bytes);
 Or, using `deno`:
 
 ```js
-import {toBytes, toBase64} from 'https://deno.land/x/fast_base64/mod.ts'
+import {toBytes, toBase64} from 'https://deno.land/x/fast_base64/mod.ts';
 ```
 
 ## Alternative imports
@@ -62,7 +62,7 @@ The added runtime overhead when combining these with the fastest de-/encoder is 
 
 ## Wouldn't this be _even faster_ with threading?
 
-Sadly, no. This repository includes threaded variants of both the Wasm and pure JS encoding/decoding, where I distribute the workload between multiple Web Workers and join their results once all are complete. You can check out the code in [./base64-wasm-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-wasm-threads.js) and [./base64-js-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-js-threads.js).
+Sadly, no. This repository includes threaded variants of both the Wasm and pure JS encoding/decoding, where I distribute the workload between multiple Web Workers and join their results once all are complete. You can check out the code in [./wasm-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/wasm-threads.js) and [./js-threads.js](https://github.com/mitschabaude/fast-base64/blob/main/js-threads.js).
 
 These turn out to be not faster than the single-threaded versions, irrespective of the number of workers, except for very large payloads (> 1MB) in the pure JS version (where 3-4 workers can provide a speed-up of 1.5-2x). Especially the Wasm version with threads is clearly slower. It also comes with a larger bundle size and worse browser support.
 
@@ -70,7 +70,7 @@ As far as I can tell, the added overhead of slicing up the input, messaging to t
 
 ## Curious about Base64?
 
-In making this package, I tried many different approaches for base64 encoding, including using the native `atob()` and `btoa()` functions and native data URL functionality. You can find 4 alternative encoding and 3 decoding methods here: [./base64-alternative.js](https://github.com/mitschabaude/fast-base64/blob/main/base64-alternative.js)
+In making this package, I tried many different approaches for base64 encoding, including using the native `atob()` and `btoa()` functions and native data URL functionality. You can find 4 alternative encoding and 3 decoding methods here: [./alternative.js](https://github.com/mitschabaude/fast-base64/blob/main/alternative.js)
 
 Turns out that one of the fastest bytes to base64 implementations in JS uses the FileReader API 😮
 

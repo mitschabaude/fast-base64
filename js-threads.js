@@ -1,4 +1,4 @@
-import Base64Worker from './base64-js.worker.js';
+import Base64Worker from './js.worker.js';
 import {concat} from './util.js';
 import {workerImport} from './worker-tools.js';
 

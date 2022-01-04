@@ -1,21 +1,18 @@
-import {toBytes, toBase64} from './dist/base64-wasm.js';
-import {
-  toBytes as toBytesNoSimd,
-  toBase64 as toBase64NoSimd,
-} from './base64-wasm-small.js';
-import {toBytes as toBytesJs, toBase64 as toBase64Js} from './base64-js.js';
+import {toBytes, toBase64} from './dist/wasm.js';
+import {toBytes as toBytesNoSimd, toBase64 as toBase64NoSimd} from './small.js';
+import {toBytes as toBytesJs, toBase64 as toBase64Js} from './js.js';
 import {
   toBytes as toBytesThreads,
   toBase64 as toBase64Threads,
-} from './dist/base64-wasm-threads.js';
+} from './dist/wasm-threads.js';
 import {
   toBytes as toBytesJsThreads,
   toBase64 as toBase64JsThreads,
-} from './dist/base64-js-threads.js';
+} from './dist/js-threads.js';
 import {
   toBytes as toBytesSmallest,
   toBase64 as toBase64Smallest,
-} from './base64-nano.js';
+} from './nano.js';
 import {
   toBase64Simple,
   toBytesSimple,
@@ -24,7 +21,7 @@ import {
   toBytesDataUri,
   toBase64DataUri,
   toBase64StringLookup,
-} from './base64-alternative.js';
+} from './alternative.js';
 import {toUrl, fromUrl} from './url.js';
 
 const n = 1000000;

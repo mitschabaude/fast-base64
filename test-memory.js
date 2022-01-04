@@ -1,5 +1,5 @@
-import {toBytes, toBase64} from './base64-wasm-small.js';
-import {toBase64Simple} from './base64-alternative.js';
+import {toBytes, toBase64} from './small.js';
+import {toBase64Simple} from './alternative.js';
 
 // not quite sure if freeing memory really works and how to best test it
 // at least memory stays at higher levels if removing free()

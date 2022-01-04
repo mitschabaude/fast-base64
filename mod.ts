@@ -1,1 +1,1 @@
-export {toBytes, toBase64} from './dist/base64-wasm.js';
+export {toBytes, toBase64} from './dist/wasm.js';

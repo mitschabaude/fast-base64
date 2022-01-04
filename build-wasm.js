@@ -1,4 +1,4 @@
-import {toBase64} from './base64-js.js';
+import {toBase64} from './js.js';
 import fs from 'fs/promises';
 import wasmInline from './wasm-inline.js';
 
